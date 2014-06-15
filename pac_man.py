@@ -6,18 +6,18 @@ import random
 
 class pac_man:
 
-    def __init__(self):
-    #def __init__(self, cpu, human):
+    #def __init__(self):
+    def __init__(self, cpu, human):
         sys.setrecursionlimit(150000)
         self.board = [[' ']*8 for i in range(8)]
         self.size = 8
-        self.board[4][4] = 'W'
-        self.board[3][4] = 'B'
-        self.board[3][3] = 'W'
-        self.board[4][3] = 'B'
+        self.board[4][4] = chr(10084) 
+        self.board[3][4] = chr(9762)
+        self.board[3][3] = chr(10084)
+        self.board[4][3] = chr(9762) 
         self.level = 0
-        #self.cpu = cpu
-        #self.human = human
+        self.cpu = cpu
+        self.human = human
         # a list of unit vectors (row, col)
         self.directions = [ (-1,-1), (-1,0), (-1,1), (0,-1),(0,1),(1,-1),(1,0),(1,1)]
 
@@ -25,18 +25,20 @@ class pac_man:
     def PrintBoard(self):
 
         # Print column numbers
-        print("  ",end="")
-        for i in range(self.size):
-            print(i+1,end=" ")
         print()
+        print("  ",end="")
+        print("1  2  3  4  5  6  7  8")
 # Build horizontal separator
-        linestr = " " + ("+-" * self.size) + "+"
+        #linestr = " " + ("+-" * self.size) + "+"
+        linestr = " " + ("---" * self.size) + "-"
 
         # Print board
+        #endSambol = chr(8198)+ "|"
+        endSambol = chr(8202)+ "|"
         for i in range(self.size):
             print(linestr)                     # Separator
             print(i+1,end="|")                 # Row number
-            for j in range(self.size): print(self.board[i][j],end="|")  # board[i][j] and pipe separator 
+            for j in range(self.size): print(self.board[i][j],end=endSambol)  # board[i][j] and pipe separator 
             print()                           # End line
         print(linestr)
 
@@ -203,7 +205,6 @@ class pac_man:
             #did not terminated by time limit
                 move = move_this
                 score = score_this
-            print ("this level score is :", score)
 
             levelLimit += 1
 
@@ -215,7 +216,7 @@ class pac_man:
             return (-1, -1)
         self.place_piece(move[0], move[1], playerColor, oppColor)
         print ("using time", (time()-t))
-        print("CPU played row: " + str(move[0]) + " col: " + str(move[1]) + ", which had a score of " +
+        print("CPU played row: " + str(move[0]+1) + " col: " + str(move[1]+1) + ", which had a score of " +
         str(score))
         return (move[0], move[1])
 
@@ -460,7 +461,7 @@ def play(Game):
     
     # if the computer move first, since every spot give 
     # same evaluate at the beginning, just put on the center
-    if (Game.cpu == 'B'):
+    if (Game.cpu == chr(10084)):
         Game.place_piece(3, 2, Game.cpu, Game.human)
         print()
         print("CPU Move:")
@@ -520,17 +521,17 @@ def main():
 
     # Validate user input
     while (onPlay == -1):
-        print("Please enter which player you would like to be, either 1 or 2: ", end="")
+        print("Please enter which player you would like to be, either good heart(1) or evil weapon(2): ", end="")
         player = input()
 
         # Setup game based on user choice
         try:
             if (player == '1'):
-                Game = pac_man('W', 'B')
+                Game = pac_man(chr(9762), chr(10084))
                 play(Game)
                 onPlay = 1
             elif (player == '2'):
-                Game = pac_man('B', 'W')
+                Game = pac_man(chr(10084), chr(9762))
                 play(Game)
                 onPlay = 1
             else:
